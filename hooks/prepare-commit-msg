@@ -1,0 +1,7 @@
+#!/bin/bash
+BRANCH=$(git rev-parse --abbrev-ref HEAD | grep -oE '^([A-Za-z]+\/)+[A-Z]+-[0-9]+')
+TICKET_ID=$(git rev-parse --abbrev-ref HEAD | grep -oE -i '[A-Z]+-[0-9]+')
+ 
+if [ "$TICKET_ID" != "" ]; then
+    grep -qs "^$BRANCH" "$1" || echo "[$TICKET_ID] $(cat $1)" > "$1"
+fi

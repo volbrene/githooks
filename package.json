@@ -1,0 +1,14 @@
+{
+  "name": "volbrene-git-hooks",
+  "version": "1.1.0",
+  "description": "",
+  "author": "Rene Volbach",
+  "license": "MIT",
+  "scripts": {
+    "preinstall": "node init-hooks.js",
+    "test": "node init-hooks.js"
+  },
+  "keywords": [
+    "githooks"
+  ]
+}
