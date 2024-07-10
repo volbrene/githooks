@@ -1,7 +1,16 @@
 #!/bin/bash
+
 BRANCH=$(git rev-parse --abbrev-ref HEAD | grep -oE '^([A-Za-z]+\/)+[A-Z]+-[0-9]+')
 TICKET_ID=$(git rev-parse --abbrev-ref HEAD | grep -oE -i '[A-Z]+-[0-9]+')
- 
+
 if [ "$TICKET_ID" != "" ]; then
-    grep -qs "^$BRANCH" "$1" || echo "[$TICKET_ID] $(cat $1)" > "$1"
+    if [[ $BRANCH == feature/* ]]; then
+        NEW_MESSAGE="feat($TICKET_ID): $(cat $1)"
+    elif [[ $BRANCH == bug/* ]]; then
+        NEW_MESSAGE="fix($TICKET_ID): $(cat $1)"
+    else
+        NEW_MESSAGE="chor($TICKET_ID): $(cat $1)"
+    fi
+
+    grep -qs "^$BRANCH" "$1" || echo "$NEW_MESSAGE" > "$1"
 fi

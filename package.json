@@ -4,6 +4,10 @@
   "description": "",
   "author": "Rene Volbach",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/volbrene/githooks.git"
+  },
   "scripts": {
     "preinstall": "node init-hooks.js",
     "test": "node init-hooks.js"
