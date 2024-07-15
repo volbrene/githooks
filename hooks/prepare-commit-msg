@@ -9,7 +9,7 @@ if [ "$TICKET_ID" != "" ]; then
     elif [[ $BRANCH == bug/* ]]; then
         NEW_MESSAGE="fix($TICKET_ID): $(cat $1)"
     else
-        NEW_MESSAGE="chor($TICKET_ID): $(cat $1)"
+        NEW_MESSAGE="chore($TICKET_ID): $(cat $1)"
     fi
 
     grep -qs "^$BRANCH" "$1" || echo "$NEW_MESSAGE" > "$1"

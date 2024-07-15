@@ -18,4 +18,4 @@ The following Git hooks are installed in the hooks directory when the package is
 
 This hook automatically parses the commit message based on the feature branch (e.g., feature/IT-1234) to include the ticket number in the commit message.
 
-Example: [IT-1234] test commit
+Example: feat(IT-1234): test commit
