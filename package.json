@@ -16,7 +16,7 @@
     "clean": "rimraf dist",
     "prepare": "npm run build",
     "prepack": "npm run build",
-    "postinstall": "node scripts/postinstall.js",
+    "preinstall": "node scripts/preinstall.js",
     "test": "jest --runInBand",
     "lint:prettier": "prettier --check .",
     "format": "prettier --write .",

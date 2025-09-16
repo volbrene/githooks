@@ -1,44 +1,48 @@
 #!/usr/bin/env bash
-# Auto-prefix commit messages from branch type, but leave merge/squash/fixup alone.
+# prepare-commit-msg hook
+# Auto-prefix commit messages based on branch name, but leave merge/squash/fixup etc. untouched.
 
 set -euo pipefail
 
 MSG_FILE="$1"
 SOURCE="${2:-}"   # may be: message|template|merge|squash|commit|...
-SHA="${3:-}"
 
-# --- Leave certain commits untouched -----------------------------------------
-# 1) True merge commits created by `git merge`
+# --- EARLY EXITS: do not modify certain commit messages --------------------
+
+# 1) Real merge commits (git passes "merge" as $2)
 if [[ "$SOURCE" == "merge" ]]; then
   exit 0
 fi
 
-# 2) Squash commit message prepared by Git
+# 2) Squash commits (git passes "squash" as $2)
 if [[ "$SOURCE" == "squash" ]]; then
   exit 0
 fi
 
-# 3) If the message already looks like a Git-generated merge or revert, keep it
-if grep -qE '^(Merge (remote-tracking )?branch|Revert )' "$MSG_FILE"; then
+# 3) If message already starts with a Git-generated "Merge ..." header
+#    This protects cases where $SOURCE is not provided (e.g. some tools/CI)
+if grep -qE '^Merge (remote-tracking )?branch' "$MSG_FILE"; then
   exit 0
 fi
 
-# 4) Respect fixup!/squash! Conventional Commits (used by autosquash)
+# 4) Respect fixup! and squash! messages (used for autosquash)
 if grep -qE '^(fixup|squash)! ' "$MSG_FILE"; then
   exit 0
 fi
 
-# 5) If the message already has a valid Conventional Commit header, keep it
+# 5) If the message already has a valid Conventional Commit header, do nothing
 if grep -qE '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]+\))?: ' "$MSG_FILE"; then
   exit 0
 fi
 
-# --- Build our header from branch name ---------------------------------------
+# --- DETERMINE BRANCH AND BUILD MESSAGE -------------------------------------
+
 RAW_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 
-# Extract ticket ID like ABC-123... (first match; unlimited digits)
+# Extract optional ticket ID anywhere in the branch name (supports unlimited digits)
 TICKET_ID="$(echo "$RAW_BRANCH" | grep -oE '[A-Z]{2,10}-[0-9]+' | head -n1 || true)"
 
+# Helper: build the commit message header with or without ticket ID
 build_message() {
   local type="$1"
   local file="$2"
@@ -51,7 +55,7 @@ build_message() {
   fi
 }
 
-# Map branch prefix to Conventional Commit type
+# Map branch prefixes to Conventional Commit types
 if [[ "$RAW_BRANCH" == feature/* || "$RAW_BRANCH" == feat/* ]]; then
   NEW_MESSAGE="$(build_message "feat" "$MSG_FILE")"
 elif [[ "$RAW_BRANCH" == bug/* || "$RAW_BRANCH" == bugfix/* || "$RAW_BRANCH" == hotfix/* || "$RAW_BRANCH" == fix/* ]]; then
@@ -75,8 +79,9 @@ elif [[ "$RAW_BRANCH" == revert/* ]]; then
 elif [[ "$RAW_BRANCH" == chore/* || "$RAW_BRANCH" == task/* ]]; then
   NEW_MESSAGE="$(build_message "chore" "$MSG_FILE")"
 else
+  # Fallback: use chore if no known prefix is found
   NEW_MESSAGE="$(build_message "chore" "$MSG_FILE")"
 fi
 
-# Overwrite message with our header + original body
+# Overwrite commit message file with new header + original body
 echo "$NEW_MESSAGE" > "$MSG_FILE"
