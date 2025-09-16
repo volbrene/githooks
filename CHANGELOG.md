@@ -1,3 +1,9 @@
+## [1.7.3](https://github.com/volbrene/githooks/compare/v1.7.2...v1.7.3) (2025-09-16)
+
+### Bug Fixes
+
+* remove typescript ([ee1e12f](https://github.com/volbrene/githooks/commit/ee1e12fed30d336434d61efd31b954cdbae0e97a))
+
 ## [1.7.2](https://github.com/volbrene/githooks/compare/v1.7.1...v1.7.2) (2025-09-16)
 
 ### Bug Fixes
