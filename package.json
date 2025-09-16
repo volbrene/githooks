@@ -12,20 +12,15 @@
     "node": ">=16"
   },
   "scripts": {
-    "build": "tsc",
-    "clean": "rimraf dist",
-    "prepare": "npm run build",
-    "prepack": "npm run build",
-    "preinstall": "node dist/init-hooks.js",
+    "preinstall": "node init-hooks.js",
     "test": "jest --runInBand",
     "lint:prettier": "prettier --check .",
     "format": "prettier --write .",
     "release": "semantic-release"
   },
   "files": [
-    "dist",
     "hooks",
-    "scripts"
+    "init-hooks.js"
   ],
   "publishConfig": {
     "access": "public"
@@ -45,7 +40,6 @@
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "jest": "^29.7.0",
     "prettier": "^3.6.2",
-    "rimraf": "^6.0.1",
     "semantic-release": "^24.0.0",
     "ts-jest": "^29.4.2",
     "ts-node": "^10.9.2",
