@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-const exec = require('child_process').exec;
+const { exec, execSync } = require('child_process');
 
 console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 console.log('🔧  Git Hooks Setup');
@@ -54,6 +54,27 @@ if (
   fs.existsSync(`${process.env.INIT_CWD}/../.git`)
 ) {
   gitPath = `${process.env.INIT_CWD}/../`;
+}
+
+// ensure we are in a git repo
+if (!fs.existsSync(path.join(gitPath, '.git'))) {
+  console.log('⚠️  No git repository found. Skipping hook setup.');
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  process.exit(0);
+}
+
+// --- Ensure core.hooksPath points to .git/hooks ---
+console.log('🔧 Ensuring core.hooksPath is set to .git/hooks...');
+try {
+  execSync('git config --unset core.hooksPath', { cwd: gitPath, stdio: 'ignore' });
+} catch {
+  // ignore if not set
+}
+try {
+  execSync('git config --local core.hooksPath .git/hooks', { cwd: gitPath });
+  console.log('✅ core.hooksPath set to .git/hooks');
+} catch (err) {
+  console.error(`❌ Failed to set core.hooksPath: ${err.message}`);
 }
 
 console.log('🧹 Removing old hooks folder if it exists...');
