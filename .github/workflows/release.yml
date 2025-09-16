@@ -1,27 +1,39 @@
+# .github/workflows/release.yml
 name: Release
 on:
-  push:
-    branches: [main]
-
+  workflow_run:
+    workflows: ['CI'] # 👈 Name deines Test-Workflows
+    types:
+      - completed
 jobs:
   release:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Needed for creating tags and committing CHANGELOG
-      issues: write # Optional (links issues in release notes)
-      pull-requests: write # Optional (links PRs in release notes)
-      id-token: write # Needed for npm provenance (optional)
+      contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch full history (required for semantic-release)
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org/'
       - run: npm ci
-      - run: npx semantic-release
+      - name: Debug NPM_TOKEN presence
+        run: |
+          if [ -z "$NPM_TOKEN" ]; then
+            echo "❌ NPM_TOKEN is NOT set"
+            exit 1
+          else
+            echo "✅ NPM_TOKEN is set (length: ${#NPM_TOKEN})"
+            echo "::add-mask::$NPM_TOKEN" # make sure token is masked
+          fi
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }} # Only needed if npm publishing is enabled
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # - run: npx semantic-release
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
