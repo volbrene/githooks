@@ -1,3 +1,9 @@
+## [1.5.1](https://github.com/volbrene/githooks/compare/v1.5.0...v1.5.1) (2025-09-16)
+
+### Bug Fixes
+
+* remove unnecessary comment from release configuration ([e04118c](https://github.com/volbrene/githooks/commit/e04118c4f67cc66755e5bed89ca53640941da407))
+
 ## [1.5.0](https://github.com/volbrene/githooks/compare/v1.4.0...v1.5.0) (2025-09-16)
 
 ### Features
