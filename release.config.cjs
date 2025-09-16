@@ -1,4 +1,3 @@
-// release.config.cjs
 module.exports = {
   branches: ['main'],
   preset: 'conventionalcommits',
