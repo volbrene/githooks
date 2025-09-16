@@ -22,18 +22,7 @@ jobs:
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org/'
       - run: npm ci
-      - name: Debug NPM_TOKEN presence
-        run: |
-          if [ -z "$NPM_TOKEN" ]; then
-            echo "❌ NPM_TOKEN is NOT set"
-            exit 1
-          else
-            echo "✅ NPM_TOKEN is set (length: ${#NPM_TOKEN})"
-            echo "::add-mask::$NPM_TOKEN" # make sure token is masked
-          fi
+      - run: npx semantic-release
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      # - run: npx semantic-release
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
