@@ -1,3 +1,10 @@
+## [1.7.0](https://github.com/volbrene/githooks/compare/v1.6.0...v1.7.0) (2025-09-16)
+
+### Features
+
+* improve setup and developer experience ([7623fbf](https://github.com/volbrene/githooks/commit/7623fbfb46c4b6927722a2c6930853f1e16d095d))
+* respect merge/squash/fixup/revert and keep existing conventional headers ([89f6434](https://github.com/volbrene/githooks/commit/89f64349f002b1107d8e6b3e0c29b2b10f3ebe26))
+
 ## [1.6.0](https://github.com/volbrene/githooks/compare/v1.5.1...v1.6.0) (2025-09-16)
 
 ### Features
