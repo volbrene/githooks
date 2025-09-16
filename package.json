@@ -1,6 +1,6 @@
 {
   "name": "volbrene-git-hooks",
-  "version": "1.7.5",
+  "version": "1.7.4",
   "description": "Git hook scripts with Conventional Commits enforcement",
   "author": "Rene Volbach",
   "license": "MIT",
@@ -12,7 +12,7 @@
     "node": ">=16"
   },
   "scripts": {
-    "preinstall": "node init-hooks.js",
+    "preinstall": "node scripts/init-hooks.js",
     "test": "jest --runInBand",
     "lint:prettier": "prettier --check .",
     "format": "prettier --write .",
@@ -23,8 +23,7 @@
   },
   "files": [
     "hooks",
-    "scripts",
-    "init-hooks.js"
+    "scripts"
   ],
   "publishConfig": {
     "access": "public"

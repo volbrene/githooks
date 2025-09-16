@@ -61,3 +61,22 @@ Supported branch prefixes:
 | `ci/*`                                   | `ci(...)`             |
 | `revert/*`                               | `revert(...)`         |
 | `task/*` or unknown                      | `chore(...)`          |
+
+# CLI Commands
+
+## `volbrene-git-hooks install`
+
+Installs or re-installs the Git hooks for the current repository.
+
+- Ensures `.git/hooks` exists
+- Copies the `prepare-commit-msg` hook from this package into `.git/hooks`
+- Makes the hook executable on Linux/macOS
+- Can be run manually or in your `package.json` (`prepare` or `postinstall` script)
+
+## `volbrene-git-hooks reset-hooks`
+
+Resets Git’s `core.hooksPath` back to the default `.git/hooks` folder.
+
+- Unsets any custom `core.hooksPath` (e.g. from Husky or other tools)
+- Sets the local repository back to `.git/hooks`
+- Prints the effective hook directory for verification

@@ -28,7 +28,7 @@ switch (command) {
   case 'install':
     console.log('🔗 Installing hooks via init-hooks.js...');
     try {
-      const initPath = path.resolve(__dirname, '../init-hooks.js');
+      const initPath = path.resolve(__dirname, 'init-hooks.js');
       sh(`node ${JSON.stringify(initPath)}`);
       console.log('✅ init-hooks.js executed successfully');
     } catch (e) {

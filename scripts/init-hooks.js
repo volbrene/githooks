@@ -73,7 +73,10 @@ try {
 
 console.log('🔗 Installing prepare-commit-msg hook...');
 try {
-  addGitHook('prepare-commit-msg', path.join('./', 'hooks'), path.join(gitPath, '.git', 'hooks'));
+  const hooksSourceDir = path.resolve(__dirname, '../hooks'); // <== nutzt Pfad der Datei
+  console.log(`📂 Using hooks source dir: ${hooksSourceDir}`);
+
+  addGitHook('prepare-commit-msg', hooksSourceDir, path.join(gitPath, '.git', 'hooks'));
 } catch (e) {
   console.error(`❌ Failed to add hook: ${e.message}`);
 }
