@@ -1,3 +1,16 @@
+## [1.4.0](https://github.com/volbrene/githooks/compare/v1.3.0...v1.4.0) (2025-09-16)
+
+### Features
+
+* add release workflow to automate deployment after CI success ([f7bc3dc](https://github.com/volbrene/githooks/commit/f7bc3dc9cced3ef5048d20080e78290c43f59ab2))
+* enable semantic-release in the release workflow ([427c5a4](https://github.com/volbrene/githooks/commit/427c5a46141e05a3d15957aa82ec93d74ae3cc0b))
+* update release.yml ([ab147d6](https://github.com/volbrene/githooks/commit/ab147d60ef6c000261cbfe22de6a6b20386dec42))
+
+### Bug Fixes
+
+* add .prettierignore to exclude build output and generated files ([909c249](https://github.com/volbrene/githooks/commit/909c249b4262d97266e27dcfc703d4324913fa54))
+* add NODE_AUTH_TOKEN to semantic-release environment variables ([7f70a30](https://github.com/volbrene/githooks/commit/7f70a30cd4d7f8b976c76454841169cd2238ddb5))
+
 ## [1.3.0](https://github.com/volbrene/githooks/compare/v1.2.1...v1.3.0) (2025-09-16)
 
 ### Features
