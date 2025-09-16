@@ -22,6 +22,17 @@ jobs:
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org/'
       - run: npm ci
+      - name: Check NPM_TOKEN presence
+        run: |
+          if [ -z "$NPM_TOKEN" ]; then
+            echo "❌ NPM_TOKEN is NOT set"; exit 1
+          else
+            echo "✅ NPM_TOKEN set (length: ${#NPM_TOKEN})"
+            echo "::add-mask::$NPM_TOKEN"
+          fi
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: npm whoami (auth check)
         run: npm whoami --registry=https://registry.npmjs.org/
         env:
