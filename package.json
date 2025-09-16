@@ -16,7 +16,7 @@
     "clean": "rimraf dist",
     "prepare": "npm run build",
     "prepack": "npm run build",
-    "preinstall": "node scripts/preinstall.js",
+    "preinstall": "node dist/init-hooks.js",
     "test": "jest --runInBand",
     "lint:prettier": "prettier --check .",
     "format": "prettier --write .",
