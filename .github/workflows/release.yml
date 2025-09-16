@@ -1,0 +1,27 @@
+name: Release
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Needed for creating tags and committing CHANGELOG
+      issues: write # Optional (links issues in release notes)
+      pull-requests: write # Optional (links PRs in release notes)
+      id-token: write # Needed for npm provenance (optional)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch full history (required for semantic-release)
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org/'
+      - run: npm ci
+      - run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }} # Only needed if npm publishing is enabled

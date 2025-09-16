@@ -1,19 +1,16 @@
-const fs = require("fs"),
-  path = require("path"),
-  os = require("os"),
-  exec = require("child_process").exec;
+const fs = require('fs'),
+  path = require('path'),
+  os = require('os'),
+  exec = require('child_process').exec;
 
 console.log(`************************** Git Hooks **************************`);
 console.log(`Check git hooks status`);
 
 ////////////////////// Check node Version ///////////////////
 let ver = process.versions.node;
-ver = ver.split(".")[0];
+ver = ver.split('.')[0];
 if (ver < 6) {
-  console.log(
-    "\x1b[41m\x1b[30mDie Node Version muss 6 oder aktueller sein",
-    "\x1b[0m"
-  );
+  console.log('\x1b[41m\x1b[30mDie Node Version muss 6 oder aktueller sein', '\x1b[0m');
   return;
 }
 
@@ -34,9 +31,9 @@ let addGitHook = (hookName, sourcePath, targetPath) => {
     fs.writeFileSync(path.join(targetPath, hookName), data);
 
     // Make pre commit hook executable on linux and mac
-    if (os.platform() === "linux" || os.platform() === "darwin") {
+    if (os.platform() === 'linux' || os.platform() === 'darwin') {
       exec(
-        "chmod +x " + hookName,
+        'chmod +x ' + hookName,
         {
           cwd: path.join(targetPath),
         },
@@ -50,7 +47,7 @@ let addGitHook = (hookName, sourcePath, targetPath) => {
       );
     }
 
-    console.warn("Hook " + hookName + " added to " + targetPath);
+    console.warn('Hook ' + hookName + ' added to ' + targetPath);
   }
 };
 
@@ -67,7 +64,7 @@ if (
 
 // remove old hooks folder
 try {
-  fs.rmSync(path.join(gitPath, ".git", "hooks"), {
+  fs.rmSync(path.join(gitPath, '.git', 'hooks'), {
     recursive: true,
     force: true,
   });
@@ -79,15 +76,9 @@ try {
 
 // Copy pre commit hooks
 try {
-  addGitHook(
-    "prepare-commit-msg",
-    path.join("./", "hooks"),
-    path.join(gitPath, ".git", "hooks")
-  );
+  addGitHook('prepare-commit-msg', path.join('./', 'hooks'), path.join(gitPath, '.git', 'hooks'));
 } catch (e) {
   //console.warn('Folder exists');
 }
 
-console.log(
-  `************************** End Git Hooks **************************`
-);
+console.log(`************************** End Git Hooks **************************`);
