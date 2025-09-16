@@ -25,6 +25,11 @@ if grep -qE '^Merge (remote-tracking )?branch' "$MSG_FILE"; then
   exit 0
 fi
 
+# 3b) If message already starts with a Git-generated "Revert ..." header, keep it
+if grep -qE '^Revert ' "$MSG_FILE"; then
+  exit 0
+fi
+
 # 4) Respect fixup! and squash! messages (used for autosquash)
 if grep -qE '^(fixup|squash)! ' "$MSG_FILE"; then
   exit 0
