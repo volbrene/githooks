@@ -18,8 +18,12 @@
     "format": "prettier --write .",
     "release": "semantic-release"
   },
+  "bin": {
+    "volbrene-git-hooks": "scripts/cli.js"
+  },
   "files": [
     "hooks",
+    "scripts",
     "init-hooks.js"
   ],
   "publishConfig": {

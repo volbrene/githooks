@@ -63,20 +63,6 @@ if (!fs.existsSync(path.join(gitPath, '.git'))) {
   process.exit(0);
 }
 
-// --- Ensure core.hooksPath points to .git/hooks ---
-console.log('🔧 Ensuring core.hooksPath is set to .git/hooks...');
-try {
-  execSync('git config --unset core.hooksPath', { cwd: gitPath, stdio: 'ignore' });
-} catch {
-  // ignore if not set
-}
-try {
-  execSync('git config --local core.hooksPath .git/hooks', { cwd: gitPath });
-  console.log('✅ core.hooksPath set to .git/hooks');
-} catch (err) {
-  console.error(`❌ Failed to set core.hooksPath: ${err.message}`);
-}
-
 console.log('🧹 Removing old hooks folder if it exists...');
 try {
   fs.rmSync(path.join(gitPath, '.git', 'hooks'), { recursive: true, force: true });
