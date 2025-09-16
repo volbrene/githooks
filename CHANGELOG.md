@@ -1,3 +1,9 @@
+## [1.7.4](https://github.com/volbrene/githooks/compare/v1.7.3...v1.7.4) (2025-09-16)
+
+### Bug Fixes
+
+* fix tests for revert ([ba04a98](https://github.com/volbrene/githooks/commit/ba04a987cc10b0def8d9e19275a3bf66b880e6f7))
+
 ## [1.7.3](https://github.com/volbrene/githooks/compare/v1.7.2...v1.7.3) (2025-09-16)
 
 ### Bug Fixes
