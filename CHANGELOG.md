@@ -1,3 +1,9 @@
+## [1.8.1](https://github.com/volbrene/githooks/compare/v1.8.0...v1.8.1) (2025-09-16)
+
+### Bug Fixes
+
+* refactor cli commands ([d2926b5](https://github.com/volbrene/githooks/commit/d2926b5eadc1081259727af70c2c47bfcfe34bd5))
+
 ## [1.8.0](https://github.com/volbrene/githooks/compare/v1.7.5...v1.8.0) (2025-09-16)
 
 ### Features
