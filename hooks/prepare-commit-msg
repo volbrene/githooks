@@ -1,34 +1,59 @@
 #!/bin/bash
 
-BRANCH=$(git rev-parse --abbrev-ref HEAD | grep -oE '^([A-Za-z]+\/)+[A-Z]+-[0-9]+')
-TICKET_ID=$(git rev-parse --abbrev-ref HEAD | grep -oE -i '[A-Z]+-[0-9]+')
+# Get the full branch name (always)
+RAW_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 
-if [ "$TICKET_ID" != "" ]; then
-    if [[ $BRANCH == feature/* || $BRANCH == feat/* ]]; then
-        NEW_MESSAGE="feat($TICKET_ID): $(cat "$1")"
-    elif [[ $BRANCH == bug/* || $BRANCH == bugfix/* || $BRANCH == hotfix/* || $BRANCH == fix/* ]]; then
-        NEW_MESSAGE="fix($TICKET_ID): $(cat "$1")"
-    elif [[ $BRANCH == docs/* ]]; then
-        NEW_MESSAGE="docs($TICKET_ID): $(cat "$1")"
-    elif [[ $BRANCH == style/* ]]; then
-        NEW_MESSAGE="style($TICKET_ID): $(cat "$1")"
-    elif [[ $BRANCH == refactor/* ]]; then
-        NEW_MESSAGE="refactor($TICKET_ID): $(cat "$1")"
-    elif [[ $BRANCH == perf/* || $BRANCH == performance/* ]]; then
-        NEW_MESSAGE="perf($TICKET_ID): $(cat "$1")"
-    elif [[ $BRANCH == test/* || $BRANCH == tests/* ]]; then
-        NEW_MESSAGE="test($TICKET_ID): $(cat "$1")"
-    elif [[ $BRANCH == build/* ]]; then
-        NEW_MESSAGE="build($TICKET_ID): $(cat "$1")"
-    elif [[ $BRANCH == ci/* ]]; then
-        NEW_MESSAGE="ci($TICKET_ID): $(cat "$1")"
-    elif [[ $BRANCH == revert/* ]]; then
-        NEW_MESSAGE="revert($TICKET_ID): $(cat "$1")"
-    elif [[ $BRANCH == chore/* ]]; then
-        NEW_MESSAGE="chore($TICKET_ID): $(cat "$1")"
-    else
-        NEW_MESSAGE="chore($TICKET_ID): $(cat "$1")"
-    fi
+# Extract optional ticket ID anywhere in the branch name (e.g., IT-1234)
+TICKET_ID="$(echo "$RAW_BRANCH" | grep -oE -i '[A-Z]+-[0-9]+')"
 
-    grep -qs "^$BRANCH" "$1" || echo "$NEW_MESSAGE" > "$1"
+# Helper: build the commit message header with or without ticket ID
+build_message() {
+  local type="$1"
+  local msg_file="$2"
+  local body
+  body="$(cat "$msg_file")"
+
+  if [ -n "$TICKET_ID" ]; then
+    echo "${type}(${TICKET_ID}): ${body}"
+  else
+    echo "${type}: ${body}"
+  fi
+}
+
+# Detect the commit type from the first path segment of the branch
+# Examples: feature/* → feat, bug|bugfix|hotfix|fix → fix, etc.
+if [[ "$RAW_BRANCH" == feature/* || "$RAW_BRANCH" == feat/* ]]; then
+  NEW_MESSAGE="$(build_message "feat" "$1")"
+elif [[ "$RAW_BRANCH" == bug/* || "$RAW_BRANCH" == bugfix/* || "$RAW_BRANCH" == hotfix/* || "$RAW_BRANCH" == fix/* ]]; then
+  NEW_MESSAGE="$(build_message "fix" "$1")"
+elif [[ "$RAW_BRANCH" == docs/* ]]; then
+  NEW_MESSAGE="$(build_message "docs" "$1")"
+elif [[ "$RAW_BRANCH" == style/* ]]; then
+  NEW_MESSAGE="$(build_message "style" "$1")"
+elif [[ "$RAW_BRANCH" == refactor/* ]]; then
+  NEW_MESSAGE="$(build_message "refactor" "$1")"
+elif [[ "$RAW_BRANCH" == perf/* || "$RAW_BRANCH" == performance/* ]]; then
+  NEW_MESSAGE="$(build_message "perf" "$1")"
+elif [[ "$RAW_BRANCH" == test/* || "$RAW_BRANCH" == tests/* ]]; then
+  NEW_MESSAGE="$(build_message "test" "$1")"
+elif [[ "$RAW_BRANCH" == build/* ]]; then
+  NEW_MESSAGE="$(build_message "build" "$1")"
+elif [[ "$RAW_BRANCH" == ci/* ]]; then
+  NEW_MESSAGE="$(build_message "ci" "$1")"
+elif [[ "$RAW_BRANCH" == revert/* ]]; then
+  NEW_MESSAGE="$(build_message "revert" "$1")"
+elif [[ "$RAW_BRANCH" == chore/* || "$RAW_BRANCH" == task/* ]]; then
+  # Map task/* explicitly to chore for clarity
+  NEW_MESSAGE="$(build_message "chore" "$1")"
+else
+  # Fallback: chore
+  NEW_MESSAGE="$(build_message "chore" "$1")"
 fi
+
+# If the commit message already starts with a valid Conventional Commit header, do nothing
+if grep -qE '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]+\))?: ' "$1"; then
+  exit 0
+fi
+
+# Otherwise, overwrite the message file with the new header + original body
+echo "$NEW_MESSAGE" > "$1"

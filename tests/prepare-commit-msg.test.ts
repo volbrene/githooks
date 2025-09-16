@@ -27,19 +27,21 @@ function setupRepo(): { workdir: string; msgFile: string } {
 }
 
 function runHook(workdir: string, msgFile: string, branch: string, raw: string): string {
+  // Create (or switch to) the branch
   try {
-    run(`git checkout -qb ${branch}`, workdir);
+    run(`git checkout -qb "${branch}"`, workdir);
   } catch {
-    run(`git checkout ${branch}`, workdir);
+    run(`git checkout "${branch}"`, workdir);
   }
+  // Write the raw commit message to the temp file
   fs.writeFileSync(msgFile, raw, 'utf8');
-  spawnSync(BASH, [path.join(workdir, 'prepare-commit-msg'), msgFile], {
-    cwd: workdir,
-  });
+  // Execute the hook (like Git would)
+  spawnSync(BASH, [path.join(workdir, 'prepare-commit-msg'), msgFile], { cwd: workdir });
+  // Return the (possibly rewritten) commit message
   return fs.readFileSync(msgFile, 'utf8').trim();
 }
 
-describe('prepare-commit-msg (alle Typen)', () => {
+describe('prepare-commit-msg', () => {
   test('feat', () => {
     const { workdir, msgFile } = setupRepo();
     expect(runHook(workdir, msgFile, 'feat/IT-1', 'Add feature')).toBe('feat(IT-1): Add feature');
@@ -113,5 +115,21 @@ describe('prepare-commit-msg (alle Typen)', () => {
     const { workdir, msgFile } = setupRepo();
     expect(runHook(workdir, msgFile, 'maintenance/IT-12', 'Misc')).toBe('chore(IT-12): Misc');
     expect(runHook(workdir, msgFile, 'task/IT-12', 'Misc')).toBe('chore(IT-12): Misc');
+  });
+
+  test('no ticket ID → type without parentheses', () => {
+    const { workdir, msgFile } = setupRepo();
+
+    // feature → feat:
+    expect(runHook(workdir, msgFile, 'feature/no-ticket', 'No ticket')).toBe('feat: No ticket');
+
+    // fix synonyms → fix:
+    expect(runHook(workdir, msgFile, 'bug/no-ticket', 'Fix something')).toBe('fix: Fix something');
+    expect(runHook(workdir, msgFile, 'hotfix/no-ticket', 'Quick patch')).toBe('fix: Quick patch');
+
+    // unknown → chore:
+    expect(runHook(workdir, msgFile, 'maintenance/no-ticket', 'Misc work')).toBe(
+      'chore: Misc work'
+    );
   });
 });
