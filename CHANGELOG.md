@@ -1,3 +1,9 @@
+## [1.7.1](https://github.com/volbrene/githooks/compare/v1.7.0...v1.7.1) (2025-09-16)
+
+### Bug Fixes
+
+* setup preinstall ([f08e87b](https://github.com/volbrene/githooks/commit/f08e87b5cdd8c4e1d2c6c6ff6b8dd6ffb570da2f))
+
 ## [1.7.0](https://github.com/volbrene/githooks/compare/v1.6.0...v1.7.0) (2025-09-16)
 
 ### Features
