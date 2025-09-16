@@ -4,12 +4,30 @@ BRANCH=$(git rev-parse --abbrev-ref HEAD | grep -oE '^([A-Za-z]+\/)+[A-Z]+-[0-9]
 TICKET_ID=$(git rev-parse --abbrev-ref HEAD | grep -oE -i '[A-Z]+-[0-9]+')
 
 if [ "$TICKET_ID" != "" ]; then
-    if [[ $BRANCH == feature/* ]]; then
-        NEW_MESSAGE="feat($TICKET_ID): $(cat $1)"
-    elif [[ $BRANCH == bug/* ]]; then
-        NEW_MESSAGE="fix($TICKET_ID): $(cat $1)"
+    if [[ $BRANCH == feature/* || $BRANCH == feat/* ]]; then
+        NEW_MESSAGE="feat($TICKET_ID): $(cat "$1")"
+    elif [[ $BRANCH == bug/* || $BRANCH == bugfix/* || $BRANCH == hotfix/* || $BRANCH == fix/* ]]; then
+        NEW_MESSAGE="fix($TICKET_ID): $(cat "$1")"
+    elif [[ $BRANCH == docs/* ]]; then
+        NEW_MESSAGE="docs($TICKET_ID): $(cat "$1")"
+    elif [[ $BRANCH == style/* ]]; then
+        NEW_MESSAGE="style($TICKET_ID): $(cat "$1")"
+    elif [[ $BRANCH == refactor/* ]]; then
+        NEW_MESSAGE="refactor($TICKET_ID): $(cat "$1")"
+    elif [[ $BRANCH == perf/* || $BRANCH == performance/* ]]; then
+        NEW_MESSAGE="perf($TICKET_ID): $(cat "$1")"
+    elif [[ $BRANCH == test/* || $BRANCH == tests/* ]]; then
+        NEW_MESSAGE="test($TICKET_ID): $(cat "$1")"
+    elif [[ $BRANCH == build/* ]]; then
+        NEW_MESSAGE="build($TICKET_ID): $(cat "$1")"
+    elif [[ $BRANCH == ci/* ]]; then
+        NEW_MESSAGE="ci($TICKET_ID): $(cat "$1")"
+    elif [[ $BRANCH == revert/* ]]; then
+        NEW_MESSAGE="revert($TICKET_ID): $(cat "$1")"
+    elif [[ $BRANCH == chore/* ]]; then
+        NEW_MESSAGE="chore($TICKET_ID): $(cat "$1")"
     else
-        NEW_MESSAGE="chore($TICKET_ID): $(cat $1)"
+        NEW_MESSAGE="chore($TICKET_ID): $(cat "$1")"
     fi
 
     grep -qs "^$BRANCH" "$1" || echo "$NEW_MESSAGE" > "$1"
