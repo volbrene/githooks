@@ -1,7 +1,7 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import os from 'node:os';
 import { execSync, spawnSync } from 'node:child_process';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
 const HOOK_PATH = process.env.HOOK_PATH || path.resolve(process.cwd(), 'hooks/prepare-commit-msg');
 const BASH = process.env.BASH || 'bash';
@@ -44,7 +44,9 @@ function runHook(workdir: string, msgFile: string, branch: string, raw: string):
 describe('prepare-commit-msg', () => {
   test('feat', () => {
     const { workdir, msgFile } = setupRepo();
-    expect(runHook(workdir, msgFile, 'feat/IT-1', 'Add feature')).toBe('feat(IT-1): Add feature');
+    expect(runHook(workdir, msgFile, 'feature/IT-1_test-1234', 'Add feature')).toBe(
+      'feat(IT-1): Add feature'
+    );
     expect(runHook(workdir, msgFile, 'feature/IT-1', 'Add feature')).toBe(
       'feat(IT-1): Add feature'
     );

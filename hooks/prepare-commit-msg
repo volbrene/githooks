@@ -4,7 +4,7 @@
 RAW_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 
 # Extract optional ticket ID anywhere in the branch name (e.g., IT-1234)
-TICKET_ID="$(echo "$RAW_BRANCH" | grep -oE -i '[A-Z]+-[0-9]+')"
+TICKET_ID="$(echo "$RAW_BRANCH" | grep -oE '[A-Z]{2,10}-[0-9]+' | head -n1 || true)"
 
 # Helper: build the commit message header with or without ticket ID
 build_message() {
