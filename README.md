@@ -1,21 +1,63 @@
-# Volbrene - Git Hooks
+# 🔧 Volbrene – Git Hooks
 
-This npm package enables easy configuration and management of Git Hooks for your project.#
+[![npm version](https://img.shields.io/npm/v/volbrene-git-hooks.svg)](https://www.npmjs.com/package/volbrene-git-hooks)
+[![CI](https://github.com/volbrene/githooks/actions/workflows/ci.yml/badge.svg)](https://github.com/volbrene/githooks/actions)
 
-## Installation
+> **Volbrene – Git Hooks** helps you keep your commit messages consistent and enforce [Conventional Commits](https://www.conventionalcommits.org/) automatically.
 
-Make sure you have Node.js and npm installed. Install the package with the following command:
+---
+
+## ✨ Features
+
+- ✅ **Automatic ticket reference** – parses branch names like `feature/IT-1234` and prefixes commit messages.
+- ✅ **Conventional Commits support** – supports `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`.
+- ✅ **Fallback handling** – unknown branch prefixes default to `chore(...)`.
+- ✅ **Easy setup** – installs hooks automatically via `npm install`.
+
+---
+
+## 📦 Installation
+
+Make sure you have [Node.js](https://nodejs.org/) and `npm` installed, then run:
 
 ```sh
 npm install --save-dev volbrene-git-hooks
 ```
 
-## Available Hooks
+The preinstall script in this package will automatically place the hooks into .git/hooks/.
+
+## 🔗 Available Hooks
 
 The following Git hooks are installed in the hooks directory when the package is installed:
 
-### pre-commit-msg
+### 📝 prepare-commit-msg
 
-This hook automatically parses the commit message based on the feature branch (e.g., feature/IT-1234) to include the ticket number in the commit message.
+This hook automatically rewrites commit messages based on your current branch name.
 
-Example: feat(IT-1234): test commit
+- If you are on `feature/IT-1234`, and run:
+
+```bash
+git commit -m "add new button"
+```
+
+It will rewrite the commit message to:
+
+```
+feat(IT-1234): add new button
+```
+
+Supported branch prefixes:
+
+| Branch Prefix                            | Resulting Commit Type |
+| ---------------------------------------- | --------------------- |
+| `feature/*`, `feat/*`                    | `feat(...)`           |
+| `bug/*`, `bugfix/*`, `fix/*`, `hotfix/*` | `fix(...)`            |
+| `docs/*`                                 | `docs(...)`           |
+| `style/*`                                | `style(...)`          |
+| `refactor/*`                             | `refactor(...)`       |
+| `perf/*`, `performance/*`                | `perf(...)`           |
+| `test/*`, `tests/*`                      | `test(...)`           |
+| `build/*`                                | `build(...)`          |
+| `ci/*`                                   | `ci(...)`             |
+| `revert/*`                               | `revert(...)`         |
+| `task/*` or unknown                      | `chore(...)`          |
