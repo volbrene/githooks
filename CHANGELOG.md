@@ -1,3 +1,9 @@
+## [1.7.5](https://github.com/volbrene/githooks/compare/v1.7.4...v1.7.5) (2025-09-16)
+
+### Bug Fixes
+
+* update workflows ([f26bf1f](https://github.com/volbrene/githooks/commit/f26bf1f299ac39e6d93dcf038e4467582b28dfca))
+
 ## [1.7.4](https://github.com/volbrene/githooks/compare/v1.7.3...v1.7.4) (2025-09-16)
 
 ### Bug Fixes
