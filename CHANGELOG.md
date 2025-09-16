@@ -1,3 +1,9 @@
+## [1.7.2](https://github.com/volbrene/githooks/compare/v1.7.1...v1.7.2) (2025-09-16)
+
+### Bug Fixes
+
+* remove old preinstall script and add dist folder ([e2bc544](https://github.com/volbrene/githooks/commit/e2bc544e2432270da37b4e4871ab90daf46af390))
+
 ## [1.7.1](https://github.com/volbrene/githooks/compare/v1.7.0...v1.7.1) (2025-09-16)
 
 ### Bug Fixes
