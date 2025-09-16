@@ -1,3 +1,9 @@
+## [1.8.0](https://github.com/volbrene/githooks/compare/v1.7.5...v1.8.0) (2025-09-16)
+
+### Features
+
+* init cli ([5b62fbd](https://github.com/volbrene/githooks/commit/5b62fbdb2c1ccf7171fc5647b6942f87980826e9))
+
 ## [1.7.5](https://github.com/volbrene/githooks/compare/v1.7.4...v1.7.5) (2025-09-16)
 
 ### Bug Fixes
