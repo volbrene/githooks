@@ -1,3 +1,13 @@
+## [1.5.0](https://github.com/volbrene/githooks/compare/v1.4.0...v1.5.0) (2025-09-16)
+
+### Features
+
+* add @semantic-release/github plugin to release configuration ([b447f84](https://github.com/volbrene/githooks/commit/b447f84104ddda8f54812cb6c9cb31ddd4e79dba))
+
+### Bug Fixes
+
+* remove redundant NPM_TOKEN environment variable from release workflow ([1585739](https://github.com/volbrene/githooks/commit/1585739c2218b19f8e980efd134991d144a3e8fb))
+
 ## [1.4.0](https://github.com/volbrene/githooks/compare/v1.3.0...v1.4.0) (2025-09-16)
 
 ### Features
