@@ -33,6 +33,12 @@ jobs:
 
       - run: npm ci
 
+      - name: Run Prettier
+        run: npm run lint:prettier
+
+      - name: Run Tests
+        run: npm test -- --runInBand
+
       - name: Check NPM token works
         run: npm whoami --registry=https://registry.npmjs.org/
         env:
