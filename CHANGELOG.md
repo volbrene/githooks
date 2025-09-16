@@ -1,3 +1,9 @@
+## [1.6.0](https://github.com/volbrene/githooks/compare/v1.5.1...v1.6.0) (2025-09-16)
+
+### Features
+
+* **hooks:** support unlimited digits in ticket ID extraction ([91a51f8](https://github.com/volbrene/githooks/commit/91a51f865273e80b43cbc3260a9eee82f09c57bb))
+
 ## [1.5.1](https://github.com/volbrene/githooks/compare/v1.5.0...v1.5.1) (2025-09-16)
 
 ### Bug Fixes
