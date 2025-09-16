@@ -1,18 +1,49 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Auto-prefix commit messages from branch type, but leave merge/squash/fixup alone.
 
-# Get the full branch name (always)
+set -euo pipefail
+
+MSG_FILE="$1"
+SOURCE="${2:-}"   # may be: message|template|merge|squash|commit|...
+SHA="${3:-}"
+
+# --- Leave certain commits untouched -----------------------------------------
+# 1) True merge commits created by `git merge`
+if [[ "$SOURCE" == "merge" ]]; then
+  exit 0
+fi
+
+# 2) Squash commit message prepared by Git
+if [[ "$SOURCE" == "squash" ]]; then
+  exit 0
+fi
+
+# 3) If the message already looks like a Git-generated merge or revert, keep it
+if grep -qE '^(Merge (remote-tracking )?branch|Revert )' "$MSG_FILE"; then
+  exit 0
+fi
+
+# 4) Respect fixup!/squash! Conventional Commits (used by autosquash)
+if grep -qE '^(fixup|squash)! ' "$MSG_FILE"; then
+  exit 0
+fi
+
+# 5) If the message already has a valid Conventional Commit header, keep it
+if grep -qE '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]+\))?: ' "$MSG_FILE"; then
+  exit 0
+fi
+
+# --- Build our header from branch name ---------------------------------------
 RAW_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 
-# Extract optional ticket ID anywhere in the branch name (e.g., IT-1234)
+# Extract ticket ID like ABC-123... (first match; unlimited digits)
 TICKET_ID="$(echo "$RAW_BRANCH" | grep -oE '[A-Z]{2,10}-[0-9]+' | head -n1 || true)"
 
-# Helper: build the commit message header with or without ticket ID
 build_message() {
   local type="$1"
-  local msg_file="$2"
+  local file="$2"
   local body
-  body="$(cat "$msg_file")"
-
+  body="$(cat "$file")"
   if [ -n "$TICKET_ID" ]; then
     echo "${type}(${TICKET_ID}): ${body}"
   else
@@ -20,40 +51,32 @@ build_message() {
   fi
 }
 
-# Detect the commit type from the first path segment of the branch
-# Examples: feature/* → feat, bug|bugfix|hotfix|fix → fix, etc.
+# Map branch prefix to Conventional Commit type
 if [[ "$RAW_BRANCH" == feature/* || "$RAW_BRANCH" == feat/* ]]; then
-  NEW_MESSAGE="$(build_message "feat" "$1")"
+  NEW_MESSAGE="$(build_message "feat" "$MSG_FILE")"
 elif [[ "$RAW_BRANCH" == bug/* || "$RAW_BRANCH" == bugfix/* || "$RAW_BRANCH" == hotfix/* || "$RAW_BRANCH" == fix/* ]]; then
-  NEW_MESSAGE="$(build_message "fix" "$1")"
+  NEW_MESSAGE="$(build_message "fix" "$MSG_FILE")"
 elif [[ "$RAW_BRANCH" == docs/* ]]; then
-  NEW_MESSAGE="$(build_message "docs" "$1")"
+  NEW_MESSAGE="$(build_message "docs" "$MSG_FILE")"
 elif [[ "$RAW_BRANCH" == style/* ]]; then
-  NEW_MESSAGE="$(build_message "style" "$1")"
+  NEW_MESSAGE="$(build_message "style" "$MSG_FILE")"
 elif [[ "$RAW_BRANCH" == refactor/* ]]; then
-  NEW_MESSAGE="$(build_message "refactor" "$1")"
+  NEW_MESSAGE="$(build_message "refactor" "$MSG_FILE")"
 elif [[ "$RAW_BRANCH" == perf/* || "$RAW_BRANCH" == performance/* ]]; then
-  NEW_MESSAGE="$(build_message "perf" "$1")"
+  NEW_MESSAGE="$(build_message "perf" "$MSG_FILE")"
 elif [[ "$RAW_BRANCH" == test/* || "$RAW_BRANCH" == tests/* ]]; then
-  NEW_MESSAGE="$(build_message "test" "$1")"
+  NEW_MESSAGE="$(build_message "test" "$MSG_FILE")"
 elif [[ "$RAW_BRANCH" == build/* ]]; then
-  NEW_MESSAGE="$(build_message "build" "$1")"
+  NEW_MESSAGE="$(build_message "build" "$MSG_FILE")"
 elif [[ "$RAW_BRANCH" == ci/* ]]; then
-  NEW_MESSAGE="$(build_message "ci" "$1")"
+  NEW_MESSAGE="$(build_message "ci" "$MSG_FILE")"
 elif [[ "$RAW_BRANCH" == revert/* ]]; then
-  NEW_MESSAGE="$(build_message "revert" "$1")"
+  NEW_MESSAGE="$(build_message "revert" "$MSG_FILE")"
 elif [[ "$RAW_BRANCH" == chore/* || "$RAW_BRANCH" == task/* ]]; then
-  # Map task/* explicitly to chore for clarity
-  NEW_MESSAGE="$(build_message "chore" "$1")"
+  NEW_MESSAGE="$(build_message "chore" "$MSG_FILE")"
 else
-  # Fallback: chore
-  NEW_MESSAGE="$(build_message "chore" "$1")"
+  NEW_MESSAGE="$(build_message "chore" "$MSG_FILE")"
 fi
 
-# If the commit message already starts with a valid Conventional Commit header, do nothing
-if grep -qE '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]+\))?: ' "$1"; then
-  exit 0
-fi
-
-# Otherwise, overwrite the message file with the new header + original body
-echo "$NEW_MESSAGE" > "$1"
+# Overwrite message with our header + original body
+echo "$NEW_MESSAGE" > "$MSG_FILE"

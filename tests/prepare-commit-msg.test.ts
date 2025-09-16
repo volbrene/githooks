@@ -26,7 +26,21 @@ function setupRepo(): { workdir: string; msgFile: string } {
   return { workdir, msgFile };
 }
 
-function runHook(workdir: string, msgFile: string, branch: string, raw: string): string {
+/**
+ * Run the prepare-commit-msg hook like Git would.
+ * @param workdir repo path
+ * @param msgFile path to temp commit message file
+ * @param branch branch to checkout/create
+ * @param raw initial commit message body
+ * @param source optional SOURCE arg passed by Git (e.g. "merge", "squash", "template"...)
+ */
+function runHook(
+  workdir: string,
+  msgFile: string,
+  branch: string,
+  raw: string,
+  source?: string
+): string {
   // Create (or switch to) the branch
   try {
     run(`git checkout -qb "${branch}"`, workdir);
@@ -36,7 +50,9 @@ function runHook(workdir: string, msgFile: string, branch: string, raw: string):
   // Write the raw commit message to the temp file
   fs.writeFileSync(msgFile, raw, 'utf8');
   // Execute the hook (like Git would)
-  spawnSync(BASH, [path.join(workdir, 'prepare-commit-msg'), msgFile], { cwd: workdir });
+  const args = [path.join(workdir, 'prepare-commit-msg'), msgFile];
+  if (source) args.push(source);
+  spawnSync(BASH, args, { cwd: workdir });
   // Return the (possibly rewritten) commit message
   return fs.readFileSync(msgFile, 'utf8').trim();
 }
@@ -50,6 +66,13 @@ describe('prepare-commit-msg', () => {
     expect(runHook(workdir, msgFile, 'feature/IT-1', 'Add feature')).toBe(
       'feat(IT-1): Add feature'
     );
+  });
+
+  test('unlimited digits in ticket id', () => {
+    const { workdir, msgFile } = setupRepo();
+    expect(
+      runHook(workdir, msgFile, 'feature/IT-000000000000_add_bla_blub', 'COmmit nachricht')
+    ).toBe('feat(IT-000000000000): COmmit nachricht');
   });
 
   test('fix', () => {
@@ -133,5 +156,45 @@ describe('prepare-commit-msg', () => {
     expect(runHook(workdir, msgFile, 'maintenance/no-ticket', 'Misc work')).toBe(
       'chore: Misc work'
     );
+  });
+
+  // ─────────────────────────────────────────────────────────────
+  // New cases: early exits / Git-generated messages
+  // ─────────────────────────────────────────────────────────────
+
+  test('merge commit (SOURCE=merge) stays unchanged', () => {
+    const { workdir, msgFile } = setupRepo();
+    const raw = "Merge branch 'main' of github.com:acme/repo";
+    expect(runHook(workdir, msgFile, 'feature/IT-1_x', raw, 'merge')).toBe(raw);
+  });
+
+  test('squash commit (SOURCE=squash) stays unchanged', () => {
+    const { workdir, msgFile } = setupRepo();
+    const raw = 'Squash commit message produced by Git';
+    expect(runHook(workdir, msgFile, 'feature/IT-1_x', raw, 'squash')).toBe(raw);
+  });
+
+  test('git-generated Merge header (no SOURCE) stays unchanged', () => {
+    const { workdir, msgFile } = setupRepo();
+    const raw = "Merge branch 'release' into main";
+    expect(runHook(workdir, msgFile, 'feature/IT-1_x', raw)).toBe(raw);
+  });
+
+  test('git-generated Revert header stays unchanged', () => {
+    const { workdir, msgFile } = setupRepo();
+    const raw = 'Revert "feat(IT-1): add X"';
+    expect(runHook(workdir, msgFile, 'feature/IT-1_x', raw)).toBe(raw);
+  });
+
+  test('fixup! message is respected (no rewrite)', () => {
+    const { workdir, msgFile } = setupRepo();
+    const raw = 'fixup! feat(IT-1): add login';
+    expect(runHook(workdir, msgFile, 'feature/IT-1_x', raw)).toBe(raw);
+  });
+
+  test('existing valid conventional header is respected (no rewrite)', () => {
+    const { workdir, msgFile } = setupRepo();
+    const raw = 'feat(IT-99): already good';
+    expect(runHook(workdir, msgFile, 'feature/IT-1_x', raw)).toBe(raw);
   });
 });
