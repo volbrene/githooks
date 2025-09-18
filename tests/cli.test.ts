@@ -2,7 +2,7 @@ import { execSync } from 'node:child_process';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
-import { fileExists, sh } from './_utils/utils';
+import { fileExists, getHooksDir, sh } from './_utils/utils';
 
 const NODE = process.execPath;
 const CLI = path.resolve('dist/cli.js');
@@ -51,25 +51,28 @@ describe('volbrene-git-hooks CLI', () => {
   });
 
   test('init hooks', () => {
-    const { cwd, hooksDir } = setupGitRepo();
+    const { cwd } = setupGitRepo();
 
     const out = runCLI([], cwd);
-    // expect(fileExists(path.join(hooksDir, 'prepare-commit-msg'))).toBe(true);
+
+    const hooksDir = getHooksDir(cwd);
+    expect(fileExists(path.join(hooksDir, 'prepare-commit-msg'))).toBe(true);
 
     expect(out).toContain('🔧 Git Hooks Setup');
   });
-
   test('install installs (idempotent)', () => {
-    const { cwd, hooksDir } = setupGitRepo();
+    const { cwd } = setupGitRepo();
 
     // first install
-    const out = runCLI(['install'], cwd);
-    // expect(fileExists(path.join(hooksDir, 'prepare-commit-msg'))).toBe(true);
-    expect(out).toContain('🔧 Git Hooks Setup');
+    const out1 = runCLI(['install'], cwd);
+    let hooksDir = getHooksDir(cwd);
+    expect(fileExists(path.join(hooksDir, 'prepare-commit-msg'))).toBe(true);
+    expect(out1).toContain('🔧 Git Hooks Setup');
 
-    // seccound install
+    // second install
     const out2 = runCLI(['install'], cwd);
-    // expect(fileExists(path.join(hooksDir, 'prepare-commit-msg'))).toBe(true);
+    hooksDir = getHooksDir(cwd);
+    expect(fileExists(path.join(hooksDir, 'prepare-commit-msg'))).toBe(true);
     expect(out2).toMatch(/up-to-date|already exists/i);
   });
 
@@ -92,20 +95,12 @@ describe('volbrene-git-hooks CLI', () => {
 
     runCLI(['install'], cwd);
 
-    // get absoliute hooks dir (in case core.hooksPath is set to absolute path)
-    const hooksDirRaw = sh('git rev-parse --git-path hooks', cwd);
-    const hooksDir = path.isAbsolute(hooksDirRaw) ? hooksDirRaw : path.resolve(cwd, hooksDirRaw);
-
+    const hooksDir = getHooksDir(cwd);
     expect(fileExists(path.join(hooksDir, 'prepare-commit-msg'))).toBe(true);
 
     const out = runCLI(['uninstall'], cwd);
 
-    // get hooks dir again (in case uninstall changed it)
-    const hooksDirAfterRaw = sh('git rev-parse --git-path hooks', cwd);
-    const hooksDirAfter = path.isAbsolute(hooksDirAfterRaw)
-      ? hooksDirAfterRaw
-      : path.resolve(cwd, hooksDirAfterRaw);
-
+    const hooksDirAfter = getHooksDir(cwd);
     expect(fileExists(path.join(hooksDirAfter, 'prepare-commit-msg'))).toBe(false);
     expect(out).toMatch(/uninstalled/i);
   });
