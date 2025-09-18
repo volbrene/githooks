@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { execSync, ExecSyncOptions } from 'node:child_process';
 
 /** Run a command and stream stdio to current process (no output returned). */

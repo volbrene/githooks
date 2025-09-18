@@ -3,7 +3,7 @@ import { handleInstall } from './install.js';
 import { resetHooksPath } from '../git.js';
 
 /**
- * Adds "prepare": "volbrene-git-hooks install" to package.json and runs install.
+ * Handles the 'init' command.
  */
 export function handleInit(): void {
   const packageFile = 'package.json';

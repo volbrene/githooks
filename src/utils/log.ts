@@ -1,4 +1,6 @@
 /* eslint-disable no-console */
+
+/** Simple logging utility with different log levels and icons. */
 export const log = {
   info: (msg: string) => console.log(msg),
   ok: (msg: string) => console.log(`✅ ${msg}`),

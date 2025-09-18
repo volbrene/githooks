@@ -7,8 +7,10 @@ import { log } from '../utils/log.js';
 import { fail } from '../utils/errors.js';
 
 /**
- * Copy a hook file from sourceDir to the repo's hooks directory
- * and make it executable on POSIX systems.
+ *
+ * @param hookName
+ * @param sourceDir
+ * @param targetDir
  */
 function addGitHook(hookName: string, sourceDir: string, targetDir: string): void {
   const srcFile = path.join(sourceDir, hookName);
@@ -54,8 +56,9 @@ function addGitHook(hookName: string, sourceDir: string, targetDir: string): voi
 }
 
 /**
- * Install hooks by copying from the packaged hooks directory into the repo's hooks path.
- * ESM-safe: resolves the hooks folder relative to THIS module via import.meta.url.
+ * Handles the 'install' command.
+ *
+ * @returns void
  */
 export function handleInstall(): void {
   assertGitRepo();

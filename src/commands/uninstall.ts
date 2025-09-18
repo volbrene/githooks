@@ -2,6 +2,9 @@ import { assertGitRepo, removeHooksDirAndUnset } from '../git.js';
 import { log } from '../utils/log.js';
 import { fail } from '../utils/errors.js';
 
+/**
+ * Handles the 'uninstall' command.
+ */
 export function handleUninstall(): void {
   assertGitRepo();
 
