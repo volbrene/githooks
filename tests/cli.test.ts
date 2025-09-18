@@ -88,15 +88,25 @@ describe('volbrene-git-hooks CLI', () => {
   });
 
   test('uninstall removes hooks and unsets hooksPath', () => {
-    const { cwd, hooksDir } = setupGitRepo();
+    const { cwd } = setupGitRepo();
 
-    // install first
     runCLI(['install'], cwd);
+
+    // get absoliute hooks dir (in case core.hooksPath is set to absolute path)
+    const hooksDirRaw = sh('git rev-parse --git-path hooks', cwd);
+    const hooksDir = path.isAbsolute(hooksDirRaw) ? hooksDirRaw : path.resolve(cwd, hooksDirRaw);
+
     expect(fileExists(path.join(hooksDir, 'prepare-commit-msg'))).toBe(true);
 
-    // uninstall
     const out = runCLI(['uninstall'], cwd);
-    // expect(fileExists(path.join(hooksDir, 'prepare-commit-msg'))).toBe(false); // Todo: sometimes fails....
+
+    // get hooks dir again (in case uninstall changed it)
+    const hooksDirAfterRaw = sh('git rev-parse --git-path hooks', cwd);
+    const hooksDirAfter = path.isAbsolute(hooksDirAfterRaw)
+      ? hooksDirAfterRaw
+      : path.resolve(cwd, hooksDirAfterRaw);
+
+    expect(fileExists(path.join(hooksDirAfter, 'prepare-commit-msg'))).toBe(false);
     expect(out).toMatch(/uninstalled/i);
   });
 
