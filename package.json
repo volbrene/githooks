@@ -19,6 +19,7 @@
     "prepack": "npm run build",
     "prepublishOnly": "npm run build && chmod +x dist/cli.js",
     "postbuild": "chmod +x dist/cli.js",
+    "pretest": "npm run build",
     "test": "jest --runInBand",
     "lint:prettier": "prettier --check .",
     "format": "prettier --write .",
