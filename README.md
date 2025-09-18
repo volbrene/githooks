@@ -76,7 +76,7 @@ Supported branch prefixes:
 | `revert/*`                               | `revert(...)`         |
 | `task/*` or unknown                      | `chore(...)`          |
 
-# CLI Commands
+# ⚙️ CLI Commands
 
 ## `install`
 
