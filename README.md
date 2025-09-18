@@ -18,13 +18,27 @@
 
 ## 📦 Installation
 
-Make sure you have [Node.js](https://nodejs.org/) and `npm` installed, then run:
+Make sure you have [Node.js](https://nodejs.org/) (>=16) and `npm` installed, then run:
 
 ```sh
 npm install --save-dev volbrene-git-hooks
 ```
 
-The preinstall script in this package will automatically place the hooks into .git/hooks/.
+After that, initialize the hooks with:
+
+```sh
+npx volbrene-git-hooks init
+```
+
+This will add a `prepare` script to your `package.json`:
+
+```jsonc
+"scripts": {
+  "prepare": "volbrene-git-hooks"
+}
+```
+
+With this in place, the hooks will be automatically reinstalled whenever you (or your team) run `npm install`.
 
 ## 🔗 Available Hooks
 
@@ -70,8 +84,6 @@ Installs or re-installs the Git hooks for the current repository.
 
 - Ensures `.git/hooks` exists
 - Copies the `prepare-commit-msg` hook from this package into `.git/hooks`
-- Makes the hook executable on Linux/macOS
-- Can be run manually or in your `package.json` (`prepare` or `postinstall` script)
 
 ## `volbrene-git-hooks reset-hooks`
 
@@ -80,3 +92,24 @@ Resets Git’s `core.hooksPath` back to the default `.git/hooks` folder.
 - Unsets any custom `core.hooksPath` (e.g. from Husky or other tools)
 - Sets the local repository back to `.git/hooks`
 - Prints the effective hook directory for verification
+
+## `volbrene-git-hooks uninstall`
+
+Removes all installed Git hooks and unsets `core.hooksPath`.
+
+- Deletes the `.git/hooks` folder (or the directory configured in `core.hooksPath`)
+- Attempts to unset `core.hooksPath` (ignored if not set)
+- Useful for clean-up or before switching to another hook manager
+
+## `volbrene-git-hooks init`
+
+Sets up automatic hook installation on `npm install`.
+
+- Adds `"prepare": "volbrene-git-hooks"` to your `package.json` scripts
+- Ensures hooks will be installed for every developer after `npm install`
+- Recommended for teams to keep hooks consistent
+- Copies the `prepare-commit-msg` hook from this package into `.git/hooks`
+
+## `volbrene-git-hooks help`
+
+Shows usage information and a list of available commands.
