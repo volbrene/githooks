@@ -2,6 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/volbrene-git-hooks.svg)](https://www.npmjs.com/package/volbrene-git-hooks)
 [![CI](https://github.com/volbrene/githooks/actions/workflows/ci.yml/badge.svg)](https://github.com/volbrene/githooks/actions)
+[![npm downloads](https://img.shields.io/npm/dm/volbrene-git-hooks.svg)](https://www.npmjs.com/package/volbrene-git-hooks)
 
 > **Volbrene – Git Hooks** helps you keep your commit messages consistent and enforce [Conventional Commits](https://www.conventionalcommits.org/) automatically.
 
