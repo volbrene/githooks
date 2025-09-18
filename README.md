@@ -78,14 +78,14 @@ Supported branch prefixes:
 
 # CLI Commands
 
-## `volbrene-git-hooks install`
+## `install`
 
 Installs or re-installs the Git hooks for the current repository.
 
 - Ensures `.git/hooks` exists
 - Copies the `prepare-commit-msg` hook from this package into `.git/hooks`
 
-## `volbrene-git-hooks reset-hooks`
+## `reset-hooks`
 
 Resets Git’s `core.hooksPath` back to the default `.git/hooks` folder.
 
@@ -93,7 +93,7 @@ Resets Git’s `core.hooksPath` back to the default `.git/hooks` folder.
 - Sets the local repository back to `.git/hooks`
 - Prints the effective hook directory for verification
 
-## `volbrene-git-hooks uninstall`
+## `uninstall`
 
 Removes all installed Git hooks and unsets `core.hooksPath`.
 
@@ -101,7 +101,7 @@ Removes all installed Git hooks and unsets `core.hooksPath`.
 - Attempts to unset `core.hooksPath` (ignored if not set)
 - Useful for clean-up or before switching to another hook manager
 
-## `volbrene-git-hooks init`
+## `init`
 
 Sets up automatic hook installation on `npm install`.
 
@@ -110,6 +110,6 @@ Sets up automatic hook installation on `npm install`.
 - Recommended for teams to keep hooks consistent
 - Copies the `prepare-commit-msg` hook from this package into `.git/hooks`
 
-## `volbrene-git-hooks help`
+## `help`
 
 Shows usage information and a list of available commands.
