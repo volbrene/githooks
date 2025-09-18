@@ -1,7 +1,7 @@
-name: CI
+name: Lint & Test
 on:
   pull_request:
-
+  workflow_call:
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
@@ -11,12 +11,9 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: 'npm'
-      - run: npm ci
-
-      # Run prettier check (fails if formatting is wrong)
+      - name: Install deps
+        run: npm ci
       - name: Run Prettier
         run: npm run lint:prettier
-
-      # Run tests only if Prettier passed
       - name: Run Tests
         run: npm test -- --runInBand

@@ -1,17 +1,21 @@
-name: Release
+name: Release & Publish
 on:
   push:
     branches: ['main', 'rc', 'develop']
 
 jobs:
-  release:
+  quality:
+    uses: ./.github/workflows/ci.yml
+
+  publish:
+    name: Semantic Release
+    needs: quality
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
       issues: write
       id-token: write
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,13 +29,8 @@ jobs:
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org/'
 
-      - run: npm ci
-
-      - name: Run Prettier
-        run: npm run lint:prettier
-
-      - name: Run Tests
-        run: npm test -- --runInBand
+      - name: Install deps
+        run: npm ci
 
       - name: Check NPM token works
         run: npm whoami --registry=https://registry.npmjs.org/
