@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import { handleInstall } from './install.js';
 import { resetHooksPath } from '../git.js';
+import { log } from '../utils/log.js';
 
 /**
  * Handles the 'init' command.
@@ -10,8 +11,19 @@ export function handleInit(): void {
   const raw = fs.readFileSync(packageFile, 'utf8');
   const pkg = JSON.parse(raw) as Record<string, any>;
 
-  // Ensure scripts.prepare is set to our install command
-  (pkg.scripts ||= {}).prepare = 'volbrene-git-hooks';
+  // Ensure scripts object exists
+  pkg.scripts = pkg.scripts || {};
+
+  const prepareScript = pkg.scripts.prepare;
+  const cliCommand = 'volbrene-git-hooks';
+
+  if (!prepareScript) {
+    pkg.scripts.prepare = cliCommand;
+    log.ok(`Added "prepare": "${cliCommand}" to package.json`);
+  } else if (!prepareScript.includes(cliCommand)) {
+    pkg.scripts.prepare = `${prepareScript} && ${cliCommand}`;
+    log.step(`Updated existing "prepare" script to also run "${cliCommand}"`);
+  }
 
   // Preserve formatting (tab vs spaces)
   const indent = /\t/.test(raw) ? '\t' : 2;
