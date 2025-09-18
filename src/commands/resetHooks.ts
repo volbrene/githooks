@@ -1,4 +1,4 @@
-import { assertGitRepo, getHooksPath, resetHooksPath } from '../git.js';
+import { assertGitRepo, getHooksPath, resetHooksPath } from '../utils/git.js';
 import { log } from '../utils/log.js';
 import { fail } from '../utils/errors.js';
 

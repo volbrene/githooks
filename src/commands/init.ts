@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import { handleInstall } from './install.js';
-import { resetHooksPath } from '../git.js';
+import { resetHooksPath } from '../utils/git.js';
 import { log } from '../utils/log.js';
 
 /**

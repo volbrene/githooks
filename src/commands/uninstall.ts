@@ -1,4 +1,4 @@
-import { assertGitRepo, removeHooksDirAndUnset } from '../git.js';
+import { assertGitRepo, removeHooksDirAndUnset } from '../utils/git.js';
 import { log } from '../utils/log.js';
 import { fail } from '../utils/errors.js';
 

@@ -1,6 +1,6 @@
 import fs from 'node:fs';
-import { sh, shGetOutput } from './utils/exec.js';
-import { fail } from './utils/errors.js';
+import { sh, shGetOutput } from './exec.js';
+import { fail } from './errors.js';
 import path from 'node:path';
 
 /** Ensure we are inside a git repository (cheap sanity check). */
