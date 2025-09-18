@@ -5,7 +5,7 @@ on:
 
 jobs:
   quality:
-    uses: ./.github/workflows/ci.yml
+    uses: ./.github/workflows/lint-and-test.yml
 
   publish:
     name: Semantic Release
