@@ -1,3 +1,9 @@
+## [1.9.0-beta.2](https://github.com/volbrene/githooks/compare/v1.9.0-beta.1...v1.9.0-beta.2) (2025-09-18)
+
+### Bug Fixes
+
+* ensure 'prepare' script is set in package.json for init command ([9c3677d](https://github.com/volbrene/githooks/commit/9c3677d2da42d26a5ffebf36621562e25f34ab36))
+
 ## [1.9.0-beta.1](https://github.com/volbrene/githooks/compare/v1.8.1...v1.9.0-beta.1) (2025-09-18)
 
 ### Features
