@@ -19,7 +19,7 @@
 
 ## 📦 Installation
 
-Make sure you have [Node.js](https://nodejs.org/) (>=16) and `npm` installed, then run:
+Make sure you have [Node.js](https://nodejs.org/) (>=22) and `npm` installed, then run:
 
 ```sh
 npm install --save-dev volbrene-git-hooks
