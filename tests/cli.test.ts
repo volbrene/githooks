@@ -34,6 +34,14 @@ function runCLI(args: string[], cwd: string): string {
 }
 
 describe('volbrene-git-hooks CLI', () => {
+  test('should print a warning and skip execution when no git repository is present', () => {
+    const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'pcm-'));
+
+    const out = runCLI([''], cwd);
+
+    expect(out).toMatch(/Not a git repository,/);
+  });
+
   test('init writes prepare script into package.json (no install)', () => {
     const { cwd } = setupGitRepo();
 

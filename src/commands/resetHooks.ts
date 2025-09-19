@@ -1,13 +1,11 @@
-import { assertGitRepo, getHooksPath, resetHooksPath } from '../utils/git.js';
-import { log } from '../utils/log.js';
 import { fail } from '../utils/errors.js';
+import { getHooksPath, resetHooksPath } from '../utils/git.js';
+import { log } from '../utils/log.js';
 
 /**
  * Handles the 'reset-hooks' command.
  */
 export function handleResetHooks(): void {
-  assertGitRepo();
-
   log.step('Resetting core.hooksPath to .git/hooks...');
 
   try {

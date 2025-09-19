@@ -2,9 +2,9 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { assertGitRepo, getHooksPath, resolveRepoRoot } from '../utils/git.js';
-import { log } from '../utils/log.js';
 import { fail } from '../utils/errors.js';
+import { getHooksPath, resolveRepoRoot } from '../utils/git.js';
+import { log } from '../utils/log.js';
 
 /**
  *
@@ -61,8 +61,6 @@ function addGitHook(hookName: string, sourceDir: string, targetDir: string): voi
  * @returns void
  */
 export function handleInstall(): void {
-  assertGitRepo();
-
   log.step('Git Hooks Setup');
 
   // Resolve repo root

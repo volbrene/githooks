@@ -1,8 +1,34 @@
-## [1.9.0-beta.3](https://github.com/volbrene/githooks/compare/v1.9.0-beta.2...v1.9.0-beta.3) (2025-09-19)
+## [1.9.2](https://github.com/volbrene/githooks/compare/v1.9.1...v1.9.2) (2025-09-19)
+
+### Bug Fixes
+
+* skip execution gracefully when no git repository is present ([9fdc3d1](https://github.com/volbrene/githooks/commit/9fdc3d1fd9208607d575ed038559c449f665f00d))
+
+## [1.9.1](https://github.com/volbrene/githooks/compare/v1.9.0...v1.9.1) (2025-09-19)
 
 ### Bug Fixes
 
 * update CI badge to point to release workflow ([279128b](https://github.com/volbrene/githooks/commit/279128b665f2d07799b965d351390cea3d6c2527))
+
+## [1.9.0](https://github.com/volbrene/githooks/compare/v1.8.1...v1.9.0) (2025-09-19)
+
+### Features
+
+* add build to pretest ([52d600a](https://github.com/volbrene/githooks/commit/52d600ab6a7ffec9328ddcbe35927efa8c1c5f7d))
+* aktualisiere CI- und Release-Workflows zur Vereinfachung der Trigger-Bedingungen ([85b9715](https://github.com/volbrene/githooks/commit/85b97151a1f5dd895a62c2e45c73a6aaf0121994))
+* erweitere Branch-Konfiguration in release.config.cjs ([31787f1](https://github.com/volbrene/githooks/commit/31787f1143c31c393290ce78c92c4cce0f65c06e))
+* fix uninstall test ([1838177](https://github.com/volbrene/githooks/commit/1838177e95d4991c8a8cf39ca49a2f202d4c7ba4))
+* init first cli tests ([1dd2632](https://github.com/volbrene/githooks/commit/1dd2632cd1f927b888f5d55b56f013248300df5a))
+* init typescript ([ea6dfa4](https://github.com/volbrene/githooks/commit/ea6dfa49d41f17ed414109d516ef987958d171c6))
+* refactoring src ([452a7b6](https://github.com/volbrene/githooks/commit/452a7b69d74cbfb534ebeacf03073a51b4f59385))
+* remove old scripts ([a3b5ed9](https://github.com/volbrene/githooks/commit/a3b5ed97c681da89e512d91ec1641f08072cc0a7))
+* simplify CLI command names in README ([f2167b4](https://github.com/volbrene/githooks/commit/f2167b450e076e307161eccd28e129724b94491d))
+* update Readme ([de52308](https://github.com/volbrene/githooks/commit/de523086923eceaf0abe22dc01e4fede197930d8))
+* update section header for CLI commands in README ([1915e50](https://github.com/volbrene/githooks/commit/1915e50656c91b77b89d665d29f43ccd6c94f455))
+
+### Bug Fixes
+
+* ensure 'prepare' script is set in package.json for init command ([9c3677d](https://github.com/volbrene/githooks/commit/9c3677d2da42d26a5ffebf36621562e25f34ab36))
 
 ## [1.9.0-beta.2](https://github.com/volbrene/githooks/compare/v1.9.0-beta.1...v1.9.0-beta.2) (2025-09-18)
 
