@@ -1,6 +1,6 @@
 {
   "name": "volbrene-git-hooks",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "type": "module",
   "description": "Git hook scripts with Conventional Commits enforcement",
   "author": "Rene Volbach",

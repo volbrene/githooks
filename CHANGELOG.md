@@ -1,3 +1,9 @@
+## [1.9.1](https://github.com/volbrene/githooks/compare/v1.9.0...v1.9.1) (2025-09-19)
+
+### Bug Fixes
+
+* update CI badge to point to release workflow ([279128b](https://github.com/volbrene/githooks/commit/279128b665f2d07799b965d351390cea3d6c2527))
+
 ## [1.9.0](https://github.com/volbrene/githooks/compare/v1.8.1...v1.9.0) (2025-09-19)
 
 ### Features
