@@ -1,3 +1,9 @@
+## [1.9.2](https://github.com/volbrene/githooks/compare/v1.9.1...v1.9.2) (2025-09-19)
+
+### Bug Fixes
+
+* skip execution gracefully when no git repository is present ([9fdc3d1](https://github.com/volbrene/githooks/commit/9fdc3d1fd9208607d575ed038559c449f665f00d))
+
 ## [1.9.1](https://github.com/volbrene/githooks/compare/v1.9.0...v1.9.1) (2025-09-19)
 
 ### Bug Fixes
