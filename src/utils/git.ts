@@ -1,15 +1,16 @@
 import fs from 'node:fs';
-import { sh, shGetOutput } from './exec.js';
-import { fail } from './errors.js';
 import path from 'node:path';
+import { sh, shGetOutput } from './exec.js';
 
 /** Ensure we are inside a git repository (cheap sanity check). */
-export function assertGitRepo(): void {
+export function isGitRepository(): boolean {
   try {
     shGetOutput('git rev-parse --is-inside-work-tree');
   } catch (e) {
-    fail(e, 'Not a git repository');
+    return false;
   }
+
+  return true;
 }
 
 /**
