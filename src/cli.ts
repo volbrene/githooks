@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-import { Command } from './types.js';
-import { log } from './utils/log.js';
-import { handleResetHooks } from './commands/resetHooks.js';
-import { handleInstall } from './commands/install.js';
-import { handleUninstall } from './commands/uninstall.js';
 import { handleInit } from './commands/init.js';
+import { handleInstall } from './commands/install.js';
+import { handleResetHooks } from './commands/resetHooks.js';
+import { handleUninstall } from './commands/uninstall.js';
+import { Command } from './types.js';
+import { isGitRepository } from './utils/git.js';
+import { log } from './utils/log.js';
 
 function printUsage(): void {
   log.info('Usage: volbrene-git-hooks <command>\n');
@@ -18,6 +19,12 @@ function printUsage(): void {
 (function main() {
   const [, , ...argv] = process.argv;
   const command = (argv[0] || 'install') as Command;
+
+  if (!isGitRepository()) {
+    log.info('Not a git repository, skipping...');
+
+    process.exit(0);
+  }
 
   switch (command) {
     case 'init':
