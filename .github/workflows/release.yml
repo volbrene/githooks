@@ -1,17 +1,15 @@
-name: Release
+name: Release & Publish
 on:
-  workflow_run:
-    workflows: ['CI']
-    types: [completed]
+  push:
+    branches: ['main', 'rc', 'develop']
 
 jobs:
-  release:
-    # Only run if CI succeeded AND the source branch was main
-    if: >
-      ${{
-        github.event.workflow_run.conclusion == 'success' &&
-        github.event.workflow_run.head_branch == 'main'
-      }}
+  quality:
+    uses: ./.github/workflows/lint-and-test.yml
+
+  publish:
+    name: Semantic Release
+    needs: quality
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -19,25 +17,20 @@ jobs:
       issues: write
       id-token: write
     steps:
-      - name: Check out the exact commit from the CI run
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.event.workflow_run.head_sha }}
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org/'
 
-      - run: npm ci
-
-      - name: Run Prettier
-        run: npm run lint:prettier
-
-      - name: Run Tests
-        run: npm test -- --runInBand
+      - name: Install deps
+        run: npm ci
 
       - name: Check NPM token works
         run: npm whoami --registry=https://registry.npmjs.org/

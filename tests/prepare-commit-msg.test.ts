@@ -1,26 +1,23 @@
-import { execSync, spawnSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
+import { sh } from './_utils/utils';
 
 const HOOK_PATH = process.env.HOOK_PATH || path.resolve(process.cwd(), 'hooks/prepare-commit-msg');
 const BASH = process.env.BASH || 'bash';
-
-function run(cmd: string, cwd: string) {
-  return execSync(cmd, { cwd, stdio: 'pipe' }).toString();
-}
 
 function setupRepo(): { workdir: string; msgFile: string } {
   const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'pcm-'));
   fs.copyFileSync(HOOK_PATH, path.join(workdir, 'prepare-commit-msg'));
   fs.chmodSync(path.join(workdir, 'prepare-commit-msg'), 0o755);
 
-  run('git init -q', workdir);
-  run('git config user.name "Test"', workdir);
-  run('git config user.email "test@example.com"', workdir);
+  sh('git init -q', workdir);
+  sh('git config user.name "Test"', workdir);
+  sh('git config user.email "test@example.com"', workdir);
   fs.writeFileSync(path.join(workdir, 'README.md'), 'init');
-  run('git add README.md', workdir);
-  run('git commit -qm "chore: init"', workdir);
+  sh('git add README.md', workdir);
+  sh('git commit -qm "chore: init"', workdir);
 
   const msgFile = path.join(workdir, 'COMMIT_MSG.txt');
   return { workdir, msgFile };
@@ -43,9 +40,9 @@ function runHook(
 ): string {
   // Create (or switch to) the branch
   try {
-    run(`git checkout -qb "${branch}"`, workdir);
+    sh(`git checkout -qb "${branch}"`, workdir);
   } catch {
-    run(`git checkout "${branch}"`, workdir);
+    sh(`git checkout "${branch}"`, workdir);
   }
   // Write the raw commit message to the temp file
   fs.writeFileSync(msgFile, raw, 'utf8');
