@@ -1,3 +1,9 @@
+## [1.9.3](https://github.com/volbrene/githooks/compare/v1.9.2...v1.9.3) (2025-09-25)
+
+### Bug Fixes
+
+* update commit message hook to recognize 'BREAKING CHANGE' prefix ([7dd4168](https://github.com/volbrene/githooks/commit/7dd416817028962d06d448f6f41eab53302332b9))
+
 ## [1.9.2](https://github.com/volbrene/githooks/compare/v1.9.1...v1.9.2) (2025-09-19)
 
 ### Bug Fixes
