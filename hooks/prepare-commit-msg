@@ -36,7 +36,7 @@ if grep -qE '^(fixup|squash)! ' "$MSG_FILE"; then
 fi
 
 # 5) If the message already has a valid Conventional Commit header, do nothing
-if grep -qE '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]+\))?: ' "$MSG_FILE"; then
+if grep -qE '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert|BREAKING CHANGE)(\([^)]+\))?!?: ' "$MSG_FILE"; then
   exit 0
 fi
 

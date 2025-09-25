@@ -55,6 +55,16 @@ function runHook(
 }
 
 describe('prepare-commit-msg', () => {
+  test('ignore prefix if prefix exists', () => {
+    const { workdir, msgFile } = setupRepo();
+    expect(runHook(workdir, msgFile, 'main', 'BREAKING CHANGE(IT-1): Add feature')).toBe(
+      'BREAKING CHANGE(IT-1): Add feature'
+    );
+    expect(runHook(workdir, msgFile, 'main', 'BREAKING CHANGE: Add feature')).toBe(
+      'BREAKING CHANGE: Add feature'
+    );
+  });
+
   test('feat', () => {
     const { workdir, msgFile } = setupRepo();
     expect(runHook(workdir, msgFile, 'feature/IT-1_test-1234', 'Add feature')).toBe(
